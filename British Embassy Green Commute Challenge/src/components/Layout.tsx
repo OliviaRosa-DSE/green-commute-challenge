@@ -1,5 +1,4 @@
-import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 function initials(name: string): string {
@@ -13,13 +12,7 @@ function initials(name: string): string {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { profile } = useAuth()
-  const navigate = useNavigate()
   const location = useLocation()
-
-  async function handleSignOut() {
-    await supabase.auth.signOut()
-    navigate('/login')
-  }
 
   return (
     <div className="min-h-screen bg-[#f5f0e8] flex flex-col">
@@ -42,27 +35,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </NavLink>
 
-          {/* Avatar + sign out */}
+          {/* Avatar */}
           {profile && (
-            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-              <NavLink
-                to="/profile"
-                className="flex items-center gap-2 px-1 sm:px-2 py-1 rounded-lg hover:bg-white/10 transition-colors"
-              >
-                <div className="w-9 h-9 rounded-full bg-red-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
-                  {initials(profile.display_name)}
-                </div>
-                <span className="text-white text-sm hidden sm:inline">
-                  {profile.display_name}
-                </span>
-              </NavLink>
-              <button
-                onClick={handleSignOut}
-                className="px-2 sm:px-3 py-1 text-xs bg-white/10 hover:bg-white/20 text-white rounded transition-colors shrink-0"
-              >
-                Out
-              </button>
-            </div>
+            <NavLink
+              to="/profile"
+              className="flex items-center gap-2 px-1 sm:px-2 py-1 rounded-lg hover:bg-white/10 transition-colors shrink-0"
+            >
+              <div className="w-9 h-9 rounded-full bg-red-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                {initials(profile.display_name)}
+              </div>
+              <span className="text-white text-sm hidden sm:inline">
+                {profile.display_name}
+              </span>
+            </NavLink>
           )}
         </div>
         {/* Red accent line */}
